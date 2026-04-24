@@ -12,7 +12,12 @@ from tools.currency_conversion_tool import CurrencyConverterTool
 
 class GraphBuilder():
     def __init__(self):
-        pass
+        self.tools=[
+            #WeatherInfoTool()
+            #PlaceSearchTool()
+            #CalculatorTool()
+            #CurrencyConverterTool()
+        ]
 
 
     def agent_function(self):
@@ -21,7 +26,13 @@ class GraphBuilder():
     
 
     def build_graph(self):
-        pass
+       graph_builder = StateGraph(MessagesState)
+       graph_builder.add_node("agent",self.agent_function)
+       graph_builder.add_node("tools", ToolNode(tools=self.tools))
+       graph_builder.add_edge(START,"agent")
+       graph_builder.add_conditional_edges("agent",tools_condition)
+       graph_builder.add_edge("tools","agent")
+       graph_builder.add_edge("agent",END)
 
     
     def __call__(self):
